@@ -1,14 +1,18 @@
 package com.dbenjumea.restapiconsumer.service;
 
-import com.dbenjumea.restapiconsumer.util.RestComponentBuilder;
-import org.springframework.stereotype.Service;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-@Service("restApiConsumerService")
-public class RestApiConsumer {
+import java.util.List;
 
-    private RestComponentBuilder restComponentBuilder;
+public interface RestApiConsumer<T> {
 
-    public RestApiConsumer(RestComponentBuilder restComponentBuilder) {
-        this.restComponentBuilder = restComponentBuilder;
-    }
+    HttpHeaders createHttpHeaders();
+    HttpEntity<T[]> createHttpEntity(HttpHeaders headers);
+    List<T> getList();
+    void postNew(T object);
+    boolean checkStatus(ResponseEntity<T[]> response);
+    HttpStatus getStatus(ResponseEntity<T[]> response);
 }
