@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 
 //TODO: Implement Feign as a way to consume a REST API??
 
-@Service("restApiConsumerService")
+@Service("beerRestApiConsumerService")
 public class BeerRestApiConsumer implements RestApiConsumer<Beer> {
 
     private PropertiesManager propertiesManager;
@@ -57,10 +57,10 @@ public class BeerRestApiConsumer implements RestApiConsumer<Beer> {
 
         ResponseEntity<Beer[]> response = restTemplate.getForEntity(urlGetListBeers, Beer[].class);
 
-        Optional<Beer[]> list = null;
+        Optional<Beer[]> optionalBeersList = Optional.of(response.getBody());
 
-        if(this.getStatus(response) == HttpStatus.OK) {
-            return Arrays.asList(list.get());
+        if(this.getStatus(response) == HttpStatus.OK && optionalBeersList.isPresent()) {
+            return Arrays.asList(optionalBeersList.get());
         }
         else {
             String httpcode = String.valueOf(this.getStatus(response).value());
