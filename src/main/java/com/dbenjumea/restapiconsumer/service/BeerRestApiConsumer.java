@@ -70,7 +70,12 @@ public class BeerRestApiConsumer implements RestApiConsumer<Beer> {
 
     @Override
     public void postNew(Beer object) {
+        RestTemplate restTemplate = this.restComponentBuilder.buildCustomRestTemplate();
+        String serviceUrl = propertiesManager.getHttpProjectApiUrl();
+        String urlpostNewBeer = serviceUrl + propertiesManager.getResourcePostCreateBeer();
 
+        ResponseEntity<Beer> response = restTemplate.postForEntity(urlpostNewBeer, object, Beer.class);
+        Optional<Beer> optional = Optional.of(response.getBody());
     }
 
     @Override
