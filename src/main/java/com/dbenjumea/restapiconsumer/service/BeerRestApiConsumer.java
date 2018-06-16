@@ -37,7 +37,7 @@ public class BeerRestApiConsumer implements RestApiConsumer<Beer> {
     public HttpHeaders createHttpHeaders() {
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(new MediaType[] { MediaType.APPLICATION_XML }));
+        headers.setAccept(Arrays.asList(new MediaType[] { MediaType.APPLICATION_JSON }));
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("my_other_key", "my_other_value");
 
@@ -45,8 +45,33 @@ public class BeerRestApiConsumer implements RestApiConsumer<Beer> {
     }
 
     @Override
-    public HttpEntity<Beer[]> createHttpEntity(HttpHeaders headers) {
+    public HttpEntity<Beer[]> createHttpEntityGetList(HttpHeaders headers) {
         return new HttpEntity<Beer[]>(headers);
+    }
+
+    @Override
+    public HttpEntity<Beer> createHttpEntityPost(Beer body, HttpHeaders headers) {
+        return new HttpEntity<Beer>(body, headers);
+    }
+
+    @Override
+    public List<Beer> getListWithHeaders() {
+        HttpEntity<Beer[]> entity = this.createHttpEntityGetList(this.createHttpHeaders());
+
+        RestTemplate restTemplate = this.restComponentBuilder.buildCustomRestTemplate();
+
+        String serviceUrl = propertiesManager.getHttpProjectApiUrl();
+        String urlGetListBeers = serviceUrl + propertiesManager.getResourceGetListBeers();
+        ResponseEntity<Beer[]> response = restTemplate.exchange(urlGetListBeers, HttpMethod.GET, entity, Beer[].class);
+        Optional<Beer[]> optionalBeersList = Optional.of(response.getBody());
+
+        if(this.getStatus(response) == HttpStatus.OK && optionalBeersList.isPresent()) {
+            return Arrays.asList(optionalBeersList.get());
+        }
+        else {
+            String httpcode = String.valueOf(this.getStatus(response).value());
+            throw new BeerRestApiServiceException(MESSAGE_BUNDLE.getString(httpcode));
+        }
     }
 
     @Override
@@ -69,12 +94,25 @@ public class BeerRestApiConsumer implements RestApiConsumer<Beer> {
     }
 
     @Override
+    public void postNewWithHeaders(Beer object) {
+        RestTemplate restTemplate = this.restComponentBuilder.buildCustomRestTemplate();
+
+        HttpEntity<Beer> entity = this.createHttpEntityPost(object, this.createHttpHeaders());
+        String serviceUrl = propertiesManager.getHttpProjectApiUrl();
+        String urlPostNewBeer = serviceUrl + propertiesManager.getResourcePostCreateBeer();
+
+        ResponseEntity<Beer> response = restTemplate.exchange(urlPostNewBeer, HttpMethod.POST, entity, Beer.class);
+        Optional<Beer> optional = Optional.of(response.getBody());
+    }
+
+    @Override
     public void postNew(Beer object) {
         RestTemplate restTemplate = this.restComponentBuilder.buildCustomRestTemplate();
-        String serviceUrl = propertiesManager.getHttpProjectApiUrl();
-        String urlpostNewBeer = serviceUrl + propertiesManager.getResourcePostCreateBeer();
 
-        ResponseEntity<Beer> response = restTemplate.postForEntity(urlpostNewBeer, object, Beer.class);
+        String serviceUrl = propertiesManager.getHttpProjectApiUrl();
+        String urlPostNewBeer = serviceUrl + propertiesManager.getResourcePostCreateBeer();
+
+        ResponseEntity<Beer> response = restTemplate.postForEntity(urlPostNewBeer, object, Beer.class);
         Optional<Beer> optional = Optional.of(response.getBody());
     }
 

@@ -10,8 +10,11 @@ import java.util.List;
 public interface RestApiConsumer<T> {
 
     HttpHeaders createHttpHeaders();
-    HttpEntity<T[]> createHttpEntity(HttpHeaders headers);
+    HttpEntity<T[]> createHttpEntityGetList(HttpHeaders headers);
+    HttpEntity<T> createHttpEntityPost(T body, HttpHeaders headers);
+    List<T> getListWithHeaders();
     List<T> getList();
+    void postNewWithHeaders(T object);
     void postNew(T object);
     boolean checkStatus(ResponseEntity<T[]> response);
     HttpStatus getStatus(ResponseEntity<T[]> response);

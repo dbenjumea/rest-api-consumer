@@ -21,7 +21,8 @@ public class RestApiConsumerApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		List<Beer> list = beerRestApiConsumerService.getList();
+//		List<Beer> list = beerRestApiConsumerService.getList();
+		List<Beer> list = beerRestApiConsumerService.getListWithHeaders();
 		list.stream().forEach(beer -> System.out.println(beer.toString()));
 		Beer beer = list.get(0);
 //		beer.setId(10L);
@@ -29,6 +30,7 @@ public class RestApiConsumerApplication implements CommandLineRunner{
 		beer.setAbv(3.0);
 		beer.setDescription("THIS IS A TEST");
 		beer.setLocation("TEST LOCATION");
-		beerRestApiConsumerService.postNew(beer);
+//		beerRestApiConsumerService.postNew(beer);
+		beerRestApiConsumerService.postNewWithHeaders(beer);
 	}
 }
