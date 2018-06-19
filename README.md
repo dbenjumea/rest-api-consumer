@@ -11,5 +11,5 @@
 In order to run the application:
 
 1) Run the commands clean and install by Maven: mvn clean install or IDE Maven tool.
-2) Go to /target folder where you will find a jar "rest-api-consumer-0.0.1-SNAPSHOT.jar"
+2) Go to "target" folder inside the project, in "target" you will find a jar "rest-api-consumer-0.0.1-SNAPSHOT.jar"
 3) Run the following command by the command line: java -jar rest-api-consumer-0.0.1-SNAPSHOT.jar
