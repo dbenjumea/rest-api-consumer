@@ -94,7 +94,7 @@ public class BeerRestApiConsumer implements RestApiConsumer<Beer> {
     }
 
     @Override
-    public void postNewWithHeaders(Beer object) {
+    public boolean postNewWithHeaders(Beer object) {
         RestTemplate restTemplate = this.restComponentBuilder.buildCustomRestTemplate();
 
         HttpEntity<Beer> entity = this.createHttpEntityPost(object, this.createHttpHeaders());
@@ -103,10 +103,12 @@ public class BeerRestApiConsumer implements RestApiConsumer<Beer> {
 
         ResponseEntity<Beer> response = restTemplate.exchange(urlPostNewBeer, HttpMethod.POST, entity, Beer.class);
         Optional<Beer> optional = Optional.of(response.getBody());
+
+        return (response.getStatusCode() == HttpStatus.CREATED) ? true : false;
     }
 
     @Override
-    public void postNew(Beer object) {
+    public boolean postNew(Beer object) {
         RestTemplate restTemplate = this.restComponentBuilder.buildCustomRestTemplate();
 
         String serviceUrl = propertiesManager.getHttpProjectApiUrl();
@@ -114,6 +116,8 @@ public class BeerRestApiConsumer implements RestApiConsumer<Beer> {
 
         ResponseEntity<Beer> response = restTemplate.postForEntity(urlPostNewBeer, object, Beer.class);
         Optional<Beer> optional = Optional.of(response.getBody());
+
+        return (response.getStatusCode() == HttpStatus.CREATED) ? true : false;
     }
 
     @Override

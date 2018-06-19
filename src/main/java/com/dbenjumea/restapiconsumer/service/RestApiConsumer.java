@@ -14,8 +14,8 @@ public interface RestApiConsumer<T> {
     HttpEntity<T> createHttpEntityPost(T body, HttpHeaders headers);
     List<T> getListWithHeaders();
     List<T> getList();
-    void postNewWithHeaders(T object);
-    void postNew(T object);
+    boolean postNewWithHeaders(T object);
+    boolean postNew(T object);
     boolean checkStatus(ResponseEntity<T[]> response);
     HttpStatus getStatus(ResponseEntity<T[]> response);
 }
