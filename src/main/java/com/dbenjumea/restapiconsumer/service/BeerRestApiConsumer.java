@@ -102,7 +102,6 @@ public class BeerRestApiConsumer implements RestApiConsumer<Beer> {
         String urlPostNewBeer = serviceUrl + propertiesManager.getResourcePostCreateBeer();
 
         ResponseEntity<Beer> response = restTemplate.exchange(urlPostNewBeer, HttpMethod.POST, entity, Beer.class);
-        Optional<Beer> optional = Optional.of(response.getBody());
 
         return (response.getStatusCode() == HttpStatus.CREATED) ? true : false;
     }
@@ -115,7 +114,6 @@ public class BeerRestApiConsumer implements RestApiConsumer<Beer> {
         String urlPostNewBeer = serviceUrl + propertiesManager.getResourcePostCreateBeer();
 
         ResponseEntity<Beer> response = restTemplate.postForEntity(urlPostNewBeer, object, Beer.class);
-        Optional<Beer> optional = Optional.of(response.getBody());
 
         return (response.getStatusCode() == HttpStatus.CREATED) ? true : false;
     }
