@@ -88,10 +88,8 @@ public class BeerRestApiConsumerTest {
         ResponseEntity<Beer[]> responseEntity = new ResponseEntity<>(beers, HttpStatus.OK);
 
         String urlGetListBeers = HTTP_PROJECT_API_URL + RESOURCE_GET_LIST_BEERS;
-        when(restTemplate.exchange(
+        when(restTemplate.getForEntity(
                 Mockito.eq(urlGetListBeers),
-                Mockito.eq(HttpMethod.GET),
-                any(HttpEntity.class),
                 Mockito.eq(Beer[].class))
         ).thenReturn(responseEntity);
 
